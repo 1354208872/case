@@ -1,0 +1,19 @@
+.accordion,.submenu>li{
+    list-style: none;
+}
+.accordion{
+    float: left;
+}
+.part{
+    float: left;
+    margin-top: 30px;
+    margin-left: 300px;
+    display: none;
+    position: absolute;
+}
+.show{
+    display: block;
+}
+.active{
+    color: blue;
+}

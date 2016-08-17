@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>AngularJS 简单应用</h2>
+
+	<div ng-app="mainApp" ng-controller="CalController">
+        <p>输入一个数字：<input type="number" ng-model="number"/></p>
+        <button ng-click="square()">X<sup>2</sup></button>
+        <p>结果：{{result}}</p>
+    </div>
+    <script src="js/angular-1.5.7.js"></script>
+    <script>
+        var mainApp=angular.module("mainApp",[]);
+      /*  mainApp.config(function ($provide) {
+            $provide.provider('MathService',function () {
+                this.$get=function () {
+                    var factory={};
+                    factory.multiple=function (a,b) {
+                        return a*b;
+                    };
+                    return factory;
+                }
+            })
+        });*/
+        mainApp.value("defaultInput",5);
+        mainApp.factory('MathService',function () {
+            var factory={};
+            factory.multiple=function (a,b) {
+                return a*b;
+            };
+            return factory;
+        });
+        mainApp.service('CalService',function (MathService) {
+           this.square=function (a) {
+               return MathService.multiple(a,a);
+           }
+        });
+        mainApp.controller('CalController',function ($scope,CalService,defaultInput) {
+            $scope.number=defaultInput;
+            $scope.result=CalService.square($scope.number);//载入时就写入25
+            $scope.square=function () {
+                $scope.result=CalService.square($scope.number);
+            }
+        });
+        </script>
+</body>
+</html>

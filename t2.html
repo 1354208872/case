@@ -1,0 +1,19 @@
+<!doctype html>
+<html ng-app>
+<head>
+    <script src="js/angular-1.5.7.js">
+
+    </script>
+</head>
+<body>
+Hello {{'World'}}!
+<script type="text/javascript">
+    angular.module("myApp", [])
+            .controller('MyController',
+                    function($scope) {
+                        $scope.name = "Ari";
+                    });
+
+</script>
+</body>
+</html>
