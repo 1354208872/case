@@ -139,8 +139,8 @@
 				var _fiveChess = this;
 //右侧操作按钮
 				$(".operating-panel a").click(function (event) {
-					event.preventDefault();
-					var id = $(this).attr("id");
+					event.preventDefault(); //取消事件的默认动作
+					var id = $(this).attr("id");//返回属性值
 					if (_fiveChess.isGameStart && id !== "replay_btn" ) { return; }//正在游戏 不操作
 					switch (id) {
 						case "black_btn":

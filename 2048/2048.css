@@ -1,0 +1,102 @@
+.game{
+    width: 460px;
+    margin: 50px auto;
+}
+.table{
+    width: 460px;
+    height: 460px;
+    padding: 15px 0 0 15px;
+    margin: 0 auto;
+    background: #bbada0;
+    border-radius: 10px;
+    position: relative;
+    font-size: 50px;
+    text-align: center;
+}
+.row {
+    margin-bottom: 15px;
+}
+.row:after{
+    clear: both;
+    display: block;
+    content: "c";
+    visibility: hidden;
+    line-height: 0;
+}
+.block{
+    width: 100px;
+    height: 100px;
+    border-radius: 3px;
+    background: #ccc0b3;
+    margin-right: 15px;
+    float: left;
+}
+#start{
+    margin-top: 20px;
+    font-size: 19px;
+    padding: 8px 20px;
+    float: right;
+    border: transparent;
+    background-color: #8f7a66;
+    color: white;
+}
+.startButton:after{
+    content: "c";
+    visibility: hidden;
+    display: block;
+    clear: both;
+}
+.title{
+    color: #8f7a66;
+    font-size: 60px;
+    font-weight: 700;
+    width: 100px;
+    float: left;
+    padding: 0 0;
+}
+.add{
+    position: absolute;
+    padding: 21px;
+    font-weight: 700;
+    width: 58px;
+}
+.style0{
+    background: #ccc0b3;
+}
+.style2{
+    background: #eee4da;
+    color:  #8f7a66;
+}
+.style4{
+    background: #eee4da;
+    color:  #8f7a66;
+}
+.style8{
+    background-color: #eee4da;
+    color:  #8f7a66;
+}
+.style16{
+    background-color: #eee4da;
+    color:  #8f7a66;
+}
+.style32{
+    background-color: #eee4da;
+}
+.style64{
+    background-color: #eee4da;
+}
+.style128{
+    background-color: #eee4da;
+}
+.style256{
+    background-color: #eee4da;
+}
+.style512{
+    background-color: #eee4da;
+}
+.style1024{
+    background-color: #eee4da;
+}
+.style2048{
+    background-color: #eee4da;
+}
