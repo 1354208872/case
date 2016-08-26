@@ -153,20 +153,20 @@ function checkEnd() {
 }
 
 function canMove() {
-   para.canMoveR=1;
+   para.canMoveR=0;
     for(var i=0;i<4;i++){
         for(var j=0;j<3;j++){
             if(para.data[i][j] == para.data[i][j+1]){
-                para.canMoveR=0;
+                para.canMoveR=1;
                 break;
             }
         }
     }
-    para.canMoveH=1;
+    para.canMoveH=0;
     for(j=0;j<4;j++){
         for(i=0;i<3;i++){
             if(para.data[i][j] == para.data[i+1][j]){
-                para.canMoveH=0;
+                para.canMoveH=1;
                 break;
             }
         }
@@ -223,10 +223,11 @@ function moveLeft() {
             }
         }
     }*/
-    console.log("before move:");
+   /* console.log("before move:");
     for(i=0;i<4;i++){
         console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
-    }
+    }*/
+    console.log("para.canMoveR: "+para.canMoveR);
     if(para.canMoveR){
         for(var i=0;i<4;i++){
             left(i);
