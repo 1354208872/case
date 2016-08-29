@@ -128,6 +128,7 @@ function keyDown(e) {
 function checkEnd() {
     if(para.isEnd!=2){
         var nullLen=para.nullPlace.length-para.combineNum;
+        console.log("nullLen:"+nullLen);
         canMove();
         if (nullLen || para.canMoveH ||para.canMoveR){
             para.isEnd=0;
@@ -199,7 +200,7 @@ function left(i) {
 }
 function combineLeft(i) {
     para.combineNum=0;
-    for(var j=0;j<4;j++){
+    for(var j=0;j<3;j++){
         if(para.data[i][j+1]==para.data[i][j] && para.data[i][j+1]!=0){
             para.data[i][j]= para.data[i][j]* 2;
             console.log("i="+i+",j="+j+"  "+para.data[i][j]);
@@ -211,6 +212,123 @@ function combineLeft(i) {
         }
     }
 }
+
+//右移+去空格
+function right(i) {
+    var y=3;
+    while (y>=0){
+        if(para.data[i][y]==0){
+            var yy=y;
+            for(var j=yy;j>=0;j--){
+                if(para.data[i][j]){
+                    // console.log("before:i="+i+",y="+j);
+                    para.data[i][y]=para.data[i][j];
+                    $('#x'+i+'y'+j+'>.add').animate({right:"-="+115*(y-j)+"px"});
+                    changColor(i,y,para.data[i][j]);
+                    changColor(i,j,0);
+                    console.log("before right:x="+i+",y="+j);
+                    para.data[i][j]=0;
+                    yy=j--;
+                    break;
+                }
+            }
+        }
+        y--;
+    }
+}
+function combineRight(i) {
+    para.combineNum=0;
+    for(var j=3;j>0;j--){
+        if(para.data[i][j-1]==para.data[i][j] && para.data[i][j]!=0){
+            para.data[i][j]= para.data[i][j]* 2;
+            console.log("i="+i+",j="+j+"  "+para.data[i][j]);
+            para.data[i][j-1]=0;
+            changColor(i,j-1,0);
+            changColor(i,j,para.data[i][j]);
+            j--;
+            para.combineNum++;
+        }
+    }
+}
+
+//上移+去空格
+function up(j) {
+    var x=0;
+    while (x<4){
+        if(para.data[x][j]==0){
+            var xx=x;
+            for(var i=xx;i<4;i++){
+                if(para.data[i][j]){
+                    // console.log("before:i="+i+",y="+j);
+                    para.data[x][j]=para.data[i][j];
+                    $('#x'+i+'y'+j+'>.add').animate({top:"-="+115*(i-x)+"px"});
+                    changColor(x,j,para.data[i][j]);
+                    changColor(i,j,0);
+                    console.log("before up:x="+i+",y="+j);
+                    para.data[i][j]=0;
+                    xx=i++;
+                    break;
+                }
+            }
+        }
+        x++;
+    }
+    console.log(para.data[0][j]+" "+para.data[1][j]+" "+para.data[2][j]+" "+para.data[3][j]);
+}
+function combineUp(j) {
+    para.combineNum=0;
+    for(var i=0;i<3;i++){
+        if(para.data[i+1][j]==para.data[i][j] && para.data[i][j]){
+            para.data[i][j]= para.data[i][j]* 2;
+            console.log("i="+i+",j="+j+"  "+para.data[i][j]);
+            para.data[i+1][j]=0;
+            changColor(i+1,j,0);
+            changColor(i,j,para.data[i][j]);
+            i++;
+            para.combineNum++;
+        }
+    }
+}
+
+//下移+去空格
+function down(j) {
+    var x=3;
+    while (x>=0){
+        if(para.data[x][j]==0){
+            var xx=x;
+            for(var i=xx;i>=0;i--){
+                if(para.data[i][j]){
+                    // console.log("before:i="+i+",y="+j);
+                    para.data[x][j]=para.data[i][j];
+                    $('#x'+i+'y'+j+'>.add').animate({bottom:"-="+115*(x-i)+"px"});
+                    changColor(x,j,para.data[i][j]);
+                    changColor(i,j,0);
+                    console.log("before down:x="+i+",y="+j);
+                    para.data[i][j]=0;
+                    xx=i--;
+                    break;
+                }
+            }
+        }
+        x--;
+    }
+    console.log(para.data[0][j]+" "+para.data[1][j]+" "+para.data[2][j]+" "+para.data[3][j]);
+}
+function combineDown(j) {
+    para.combineNum=0;
+    for(var i=3;i>0;i--){
+        if(para.data[i-1][j]==para.data[i][j] && para.data[i][j]){
+            para.data[i][j]= para.data[i][j]* 2;
+            console.log("i="+i+",j="+j+"  "+para.data[i][j]);
+            para.data[i-1][j]=0;
+            changColor(i-1,j,0);
+            changColor(i,j,para.data[i][j]);
+            i--;
+            para.combineNum++;
+        }
+    }
+}
+
 
 function moveLeft() {
    /* for(var i=0;i<4;i++){
@@ -251,14 +369,60 @@ function moveLeft() {
     console.log("");
 }
 function moveRight() {
-
+    console.log("para.canMoveR: "+para.canMoveR);
+    if(para.canMoveR){
+        for(var i=0;i<4;i++){
+            right(i);
+            combineRight(i);
+            right(i);
+        }
+        createNum();
+        for(i=0;i<4;i++){
+            right(i);
+        }
+    }
+    console.log("after create and move:");
+    for(i=0;i<4;i++){
+        console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
+    }
+    console.log("");
 }
 function moveUp() {
-
+  /*  console.log("before moveUp:  canMoveH:"+para.canMoveH);
+    for( var i=0;i<4;i++){
+        console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
+    }*/
+    if(para.canMoveH){
+        for(var j=0;j<4;j++){
+            up(j);
+            console.log("uped:");
+            combineUp(j);
+            up(j);
+        }
+        createNum();
+        for(j=0;j<4;j++){
+            up(j);
+        }
+    }
+  /*  console.log("after moveUp:");
+    for(i=0;i<4;i++){
+        console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
+    }*/
 }
 
 function moveDown() {
-
+    if(para.canMoveH){
+        for(var j=0;j<4;j++){
+            down(j);
+            console.log("uped:");
+            combineDown(j);
+            down(j);
+        }
+        createNum();
+        for(j=0;j<4;j++){
+            down(j);
+        }
+    }
 }
 
 

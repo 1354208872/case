@@ -10,7 +10,7 @@
     background: #bbada0;
     border-radius: 10px;
     position: relative;
-    font-size: 50px;
+    font-size: 47px;
     text-align: center;
 }
 .row {
@@ -55,10 +55,11 @@
     padding: 0 0;
 }
 .add{
+    width: 100px;
+    height: 80px;
     position: absolute;
-    padding: 21px;
+    padding-top: 20px;
     font-weight: 700;
-    width: 58px;
 }
 .style0{
     background: #ccc0b3;
@@ -68,35 +69,42 @@
     color:  #8f7a66;
 }
 .style4{
-    background: #eee4da;
+    background: #ede0c8;
     color:  #8f7a66;
 }
 .style8{
-    background-color: #eee4da;
-    color:  #8f7a66;
+    background-color: #f2b179;
+    color:  white;
 }
 .style16{
-    background-color: #eee4da;
-    color:  #8f7a66;
+    background-color:#f59563;
+    color:  white;
 }
 .style32{
-    background-color: #eee4da;
+    background-color: #f67c5f;
+    color:  white;
 }
 .style64{
-    background-color: #eee4da;
+    background-color: #f65e3b;
+    color:  white;
 }
 .style128{
-    background-color: #eee4da;
+    background-color: #edcf72;
+    color:  white;
 }
 .style256{
-    background-color: #eee4da;
+    background-color: #edcc61;
+    color:  white;
 }
 .style512{
-    background-color: #eee4da;
+    background-color:  #edc850;
+    color:  white;
 }
 .style1024{
-    background-color: #eee4da;
+    background-color:  #edc53f;
+    color:  white;
 }
 .style2048{
-    background-color: #eee4da;
+    background-color: #edc22e;
+    color:  white;
 }
