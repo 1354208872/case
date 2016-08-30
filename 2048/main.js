@@ -5,11 +5,13 @@
 var para={
     isStart:0,   //不开始
     isEnd:0,     //0不结束 1结束  2赢了
+    canMoveL:1,
     canMoveR:1,
-    canMoveH:1,
+    canMoveU:1,
+    canMoveD:1,
     combineNum:0, //每次合并的数字个数
     data:[],     //记录块的数字
-    nullPlace:[[0,0]]    //为空的块位置
+    nullPlace:[]    //为空的块位置
 };
 
 reStart();
@@ -22,10 +24,11 @@ function reStart(){
         }
     }*/
     para.data=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-    console.log(para.data[3][3]);
+    para.nullPlace=[[0,0],[0,1],[0,2],[0,3]];
+    /*console.log(para.data[3][3]);
     for(var i=0;i<4;i++){
         console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
-    }
+    }*/
     $(".add").remove();
     createNum();
     createNum();
@@ -37,6 +40,7 @@ function createNum() {
     checkEnd();
     if(para.isEnd==0){
         var len=para.nullPlace.length;
+       // console.log("len:"+len);
         if(len){
             para.nullPlace.splice(0,len);
         }
@@ -47,11 +51,14 @@ function createNum() {
                 }
             }
         var nullNum=para.nullPlace.length;
+        //console.log("before createNum():"+nullNum);
         var random=parseInt(Math.random()*nullNum);
         var randomArray=para.nullPlace[random];
+        //console.log("("+randomArray[0]+","+randomArray[1]+")");
         para.data[randomArray[0]][randomArray[1]]=2;
         changColor(randomArray[0],randomArray[1], 2);
-        console.log("("+randomArray[0]+","+randomArray[1]+")");
+        para.nullPlace.length--;
+        //console.log("");
     }
 
    /* console.log("after create number:");
@@ -111,26 +118,38 @@ function keyDown(e) {
     var e=e||event;
     var currkey=e.keyCode|| e.which ||e.charCode;
     checkEnd();
-    //console.log("is end? "+para.isEnd);
+    console.log("is end? "+para.isEnd);
     if(currkey>=37 && currkey<=40 && para.isEnd==0){
         switch (currkey){
-            case 37: moveLeft();break;
-            case 38:moveUp();break;
-            case 39:moveRight();break;
-            default:moveDown();break;
+            case 37: moveLeft();console.log(" ");break;
+            case 38:moveUp();console.log(" ");break;
+            case 39:moveRight();console.log(" ");break;
+            default:moveDown();console.log(" ");break;
         }
     }
-    else if(para.isEnd==1){
-        layer.msg("游戏结束！");
+    if(para.isEnd==1){
+        layer.msg("游戏结束！是否重新开始游戏？",{
+            time:0,
+            btn:['是','否'],
+            yes:function (index) {
+                reStart();
+                layer.close(index);
+            }
+        });
     }
-    else  layer.msg("恭喜！您已达到2048！");
+    if(para.isEnd==2)
+        layer.msg("恭喜！您已达到2048！");
 }
 function checkEnd() {
     if(para.isEnd!=2){
-        var nullLen=para.nullPlace.length-para.combineNum;
-        console.log("nullLen:"+nullLen);
-        canMove();
-        if (nullLen || para.canMoveH ||para.canMoveR){
+       /* var nullLen=para.nullPlace.length-para.combineNum;
+        console.log("after checkEnd():"+nullLen);*/
+        canMoveD();
+        canMoveL();
+        canMoveR();
+        canMoveU();
+        if (para.nullPlace.length || para.canMoveL || para.canMoveU ||para.canMoveR || para.canMoveD ){
+            console.log("length:"+para.nullPlace.length+"   ,L:"+para.canMoveL+",R:"+para.canMoveR+",U:"+para.canMoveU+",D:"+para.canMoveD);
             para.isEnd=0;
         }
         else{ para.isEnd=1;
@@ -153,26 +172,84 @@ function checkEnd() {
     }
 }
 
-function canMove() {
-   para.canMoveR=0;
-    for(var i=0;i<4;i++){
-        for(var j=0;j<3;j++){
-            if(para.data[i][j] == para.data[i][j+1]){
-                para.canMoveR=1;
+function canMoveL() {
+    para.canMoveL = 0;
+    for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 3; j++) {
+            if (para.data[i][j] == para.data[i][j + 1] && para.data[i][j] ) {
+                para.canMoveL = 1;
                 break;
             }
-        }
-    }
-    para.canMoveH=0;
-    for(j=0;j<4;j++){
-        for(i=0;i<3;i++){
-            if(para.data[i][j] == para.data[i+1][j]){
-                para.canMoveH=1;
-                break;
+            if (para.data[i][j] == 0) {
+                for (var jj = j + 1; jj < 4; jj++) {
+                    if (para.data[i][jj]) {
+                        para.canMoveL = 1;
+                        break;
+                    }
+                }
             }
         }
     }
 }
+function canMoveR() {
+    para.canMoveR = 0;
+    for (var i = 0; i < 4; i++) {
+        for (var j = 3; j >0; j--) {
+            if (para.data[i][j] == para.data[i][j -1] && para.data[i][j]) {
+                para.canMoveR = 1;
+                break;
+            }
+            if (para.data[i][j] == 0) {
+                for (var jj = j - 1; jj >= 0; jj--) {
+                    if (para.data[i][jj]) {
+                        para.canMoveR = 1;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+function canMoveU() {
+    para.canMoveU=0;
+    for(var j=0;j<4;j++){
+        for(var i=0;i<3;i++){
+            if(para.data[i][j] == para.data[i+1][j] && para.data[i][j]){
+                para.canMoveU=1;
+                break;
+            }
+            if (para.data[i][j] == 0) {
+                for (var ii = i + 1; ii < 4; ii++) {
+                    if (para.data[ii][j]) {
+                        para.canMoveU= 1;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+function canMoveD() {
+    para.canMoveD=0;
+    for(var j=0;j<4;j++){
+        for(var i=3;i>0;i--){
+            if(para.data[i][j] == para.data[i-1][j] && para.data[i][j] ){
+                para.canMoveD=1;
+                break;
+            }
+            if (para.data[i][j] == 0) {
+                for (var ii = i - 1; ii >= 0; ii--) {
+                    if (para.data[ii][j]) {
+                        para.canMoveD= 1;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 //左移+去空格
 function left(i) {
@@ -187,7 +264,7 @@ function left(i) {
                     $('#x'+i+'y'+j+'>.add').animate({left:"-="+115*(j-y)+"px"});
                     changColor(i,y,para.data[i][j]);
                     changColor(i,j,0);
-                    console.log("before left:i="+i+",y="+j);
+                   // console.log("before left:i="+i+",y="+j);
                     para.data[i][j]=0;
                     yy=j++;
                     break;
@@ -203,7 +280,7 @@ function combineLeft(i) {
     for(var j=0;j<3;j++){
         if(para.data[i][j+1]==para.data[i][j] && para.data[i][j+1]!=0){
             para.data[i][j]= para.data[i][j]* 2;
-            console.log("i="+i+",j="+j+"  "+para.data[i][j]);
+           // console.log("i="+i+",j="+j+"  "+para.data[i][j]);
             para.data[i][j+1]=0;
             changColor(i,j+1,0);
             changColor(i,j,para.data[i][j]);
@@ -211,6 +288,8 @@ function combineLeft(i) {
             para.combineNum++;
         }
     }
+    var nullLen=para.nullPlace.length-para.combineNum;
+   // console.log("combine():"+nullLen);
 }
 
 //右移+去空格
@@ -226,7 +305,7 @@ function right(i) {
                     $('#x'+i+'y'+j+'>.add').animate({right:"-="+115*(y-j)+"px"});
                     changColor(i,y,para.data[i][j]);
                     changColor(i,j,0);
-                    console.log("before right:x="+i+",y="+j);
+                    //console.log("before right:x="+i+",y="+j);
                     para.data[i][j]=0;
                     yy=j--;
                     break;
@@ -241,7 +320,7 @@ function combineRight(i) {
     for(var j=3;j>0;j--){
         if(para.data[i][j-1]==para.data[i][j] && para.data[i][j]!=0){
             para.data[i][j]= para.data[i][j]* 2;
-            console.log("i="+i+",j="+j+"  "+para.data[i][j]);
+           // console.log("i="+i+",j="+j+"  "+para.data[i][j]);
             para.data[i][j-1]=0;
             changColor(i,j-1,0);
             changColor(i,j,para.data[i][j]);
@@ -249,6 +328,8 @@ function combineRight(i) {
             para.combineNum++;
         }
     }
+    var nullLen=para.nullPlace.length-para.combineNum;
+   // console.log("combine():"+nullLen);
 }
 
 //上移+去空格
@@ -264,7 +345,7 @@ function up(j) {
                     $('#x'+i+'y'+j+'>.add').animate({top:"-="+115*(i-x)+"px"});
                     changColor(x,j,para.data[i][j]);
                     changColor(i,j,0);
-                    console.log("before up:x="+i+",y="+j);
+                    //console.log("before up:x="+i+",y="+j);
                     para.data[i][j]=0;
                     xx=i++;
                     break;
@@ -273,14 +354,14 @@ function up(j) {
         }
         x++;
     }
-    console.log(para.data[0][j]+" "+para.data[1][j]+" "+para.data[2][j]+" "+para.data[3][j]);
+    //console.log(para.data[0][j]+" "+para.data[1][j]+" "+para.data[2][j]+" "+para.data[3][j]);
 }
 function combineUp(j) {
     para.combineNum=0;
     for(var i=0;i<3;i++){
         if(para.data[i+1][j]==para.data[i][j] && para.data[i][j]){
             para.data[i][j]= para.data[i][j]* 2;
-            console.log("i="+i+",j="+j+"  "+para.data[i][j]);
+            //console.log("i="+i+",j="+j+"  "+para.data[i][j]);
             para.data[i+1][j]=0;
             changColor(i+1,j,0);
             changColor(i,j,para.data[i][j]);
@@ -288,6 +369,8 @@ function combineUp(j) {
             para.combineNum++;
         }
     }
+    var nullLen=para.nullPlace.length-para.combineNum;
+   // console.log("combine():"+nullLen);
 }
 
 //下移+去空格
@@ -303,7 +386,7 @@ function down(j) {
                     $('#x'+i+'y'+j+'>.add').animate({bottom:"-="+115*(x-i)+"px"});
                     changColor(x,j,para.data[i][j]);
                     changColor(i,j,0);
-                    console.log("before down:x="+i+",y="+j);
+                   // console.log("before down:x="+i+",y="+j);
                     para.data[i][j]=0;
                     xx=i--;
                     break;
@@ -312,14 +395,14 @@ function down(j) {
         }
         x--;
     }
-    console.log(para.data[0][j]+" "+para.data[1][j]+" "+para.data[2][j]+" "+para.data[3][j]);
+   // console.log(para.data[0][j]+" "+para.data[1][j]+" "+para.data[2][j]+" "+para.data[3][j]);
 }
 function combineDown(j) {
     para.combineNum=0;
     for(var i=3;i>0;i--){
         if(para.data[i-1][j]==para.data[i][j] && para.data[i][j]){
             para.data[i][j]= para.data[i][j]* 2;
-            console.log("i="+i+",j="+j+"  "+para.data[i][j]);
+            //console.log("i="+i+",j="+j+"  "+para.data[i][j]);
             para.data[i-1][j]=0;
             changColor(i-1,j,0);
             changColor(i,j,para.data[i][j]);
@@ -327,32 +410,24 @@ function combineDown(j) {
             para.combineNum++;
         }
     }
+    var nullLen=para.nullPlace.length-para.combineNum;
+    //console.log("combine():"+nullLen);
 }
 
 
 function moveLeft() {
-   /* for(var i=0;i<4;i++){
-        for(var j=0;j<4;j++){
-            if(para.data[i][j]==0){
-                for(var x=j;x<4;x++){
-                    if(para.data[i][x])
-                        slide(x,j);
-                }
-            }
-        }
-    }*/
-   /* console.log("before move:");
-    for(i=0;i<4;i++){
-        console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
-    }*/
-    console.log("para.canMoveR: "+para.canMoveR);
-    if(para.canMoveR){
+   // console.log("para.canMoveR: "+para.canMoveR);
+    canMoveL();
+    console.log(" before combine():"+para.nullPlace.length);
+    if(para.canMoveL){
         for(var i=0;i<4;i++){
             left(i);
             combineLeft(i);
             left(i);
         }
+        console.log(" after combine():"+para.nullPlace.length);
         createNum();
+        console.log(" after createNum():"+para.nullPlace.length);
         for(i=0;i<4;i++){
             left(i);
         }
@@ -362,43 +437,47 @@ function moveLeft() {
         console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
     }*/
 
-    console.log("after create and move:");
+  /*  console.log("after create and move:");
     for(i=0;i<4;i++){
         console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
     }
-    console.log("");
+    console.log("");*/
 }
 function moveRight() {
-    console.log("para.canMoveR: "+para.canMoveR);
+    canMoveR();
+   // console.log("para.canMoveR: "+para.canMoveR);
     if(para.canMoveR){
         for(var i=0;i<4;i++){
             right(i);
             combineRight(i);
             right(i);
         }
+        console.log(" after combine():"+para.nullPlace.length);
         createNum();
         for(i=0;i<4;i++){
             right(i);
         }
     }
-    console.log("after create and move:");
+  /*  console.log("after create and move:");
     for(i=0;i<4;i++){
         console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
     }
-    console.log("");
+    console.log("");*/
 }
 function moveUp() {
   /*  console.log("before moveUp:  canMoveH:"+para.canMoveH);
     for( var i=0;i<4;i++){
         console.log(para.data[i][0]+" "+para.data[i][1]+" "+para.data[i][2]+" "+para.data[i][3]);
     }*/
-    if(para.canMoveH){
+    canMoveU();
+    if(para.canMoveU){
         for(var j=0;j<4;j++){
             up(j);
-            console.log("uped:");
+           // console.log("uped:");
             combineUp(j);
             up(j);
         }
+        console.log(" after combine():"+para.nullPlace.length);
         createNum();
         for(j=0;j<4;j++){
             up(j);
@@ -411,18 +490,20 @@ function moveUp() {
 }
 
 function moveDown() {
-    if(para.canMoveH){
+    canMoveD();
+    if(para.canMoveD){
         for(var j=0;j<4;j++){
             down(j);
-            console.log("uped:");
             combineDown(j);
             down(j);
         }
+        console.log(" after combine():"+para.nullPlace.length);
         createNum();
         for(j=0;j<4;j++){
             down(j);
         }
     }
+    console.log(" ");
 }
 
 
