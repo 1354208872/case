@@ -2,41 +2,40 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>jQuery.dotdotdot最简使用教程</title>
-    <script src="js/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" language="javascript" src="js/jquery.dotdotdot.js"></script>
-    <link href="//cdn.bootcss.com/normalize/3.0.3/normalize.css" rel="stylesheet">
-    <script type="text/javascript" language="javascript">
-        $(function() {
-            $('#dot1').dotdotdot({
-                wrap: "letter" ,
-                height:40,
-                after:'a'
-        });
-        })
-    </script>
     <style type="text/css">
-        body{background: #EEEEEE;}
-        div.box {
-            width: 275px;
-            margin:  auto;
-            margin-top:20px;
-            border: 1px solid #ccc;
-            height: 160px;
-            padding: 15px 20px 10px 20px;
-
+        #myDiv{
+            font-size: 30px;
         }
     </style>
+    <script>
+        function loadXMLDoc()
+        {
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+                }
+            };
+            xmlhttp.open("POST","test1024.html",true);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send("fname=Henry&lname=Ford");
+        }
+    </script>
 </head>
 <body>
-<div class="box" id="dot1">
-   到一个未知的印刷者制作了一个活版盘的类型，并且把它制作成一个样本书。它不仅存活了五个世纪，而且引领电子行业印刷的  到一个未知的印刷者制作了一个活版盘的类型，并且把它制作成一个样本书。它不仅存活了五个世纪，而且引领电子行业印刷的
-    到一个未知的印刷者制作了一个活版盘的类型，并且把它制作成一个样本书。它不仅存活了五个世纪，而且引领电子行业印刷的
-    到一个未知的印刷者制作了一个活版盘的类型，并且把它制作成一个样本书。它不仅存活了五个世纪，而且引领电子行业印刷的
-    到一个未知的印刷者制作了一个活版盘的类型，并且把它制作成一个样本书。它不仅存活了五个世纪，而且引领电子行业印刷的
-    到一个未知的印刷者制作了一个活版盘的类型，并且把它制作成一个样本书。它不仅存活了五个世纪，而且引领电子行业印刷的
-    <a href="#" class="readmore">详细</a>
-</div>
+
+<div id="myDiv"><h2>使用 AJAX 修改该文本内容</h2></div>
+<button type="button" onclick="loadXMLDoc()">修改内容</button>
 
 </body>
 </html>
